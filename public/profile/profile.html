@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/profile/style.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Your Profile</h1>
+    </header>
+    <main>
+        <div class="profile-container">
+            <!-- Левая колонка -->
+            <aside class="profile-sidebar">
+                <div class="user-info">
+                    <h2 id="username">Username</h2>
+                </div>
+                <button id="bookAppointmentBtn" class="book-btn">Записаться к врачу</button>
+            </aside>
+
+            <!-- Правая колонка -->
+            <section class="appointments-section">
+                <h2>Ваши записи</h2>
+                <div id="appointmentsList" class="appointments-grid">
+                    <!-- Квадратики записей добавляются через JS -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="/profile/script.js"></script>
+</body>
+</html>

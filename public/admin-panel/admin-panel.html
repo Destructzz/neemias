@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="/admin-panel/style.css">
+</head>
+<body>
+  <header>
+    <h1>Admin Panel</h1>
+  </header>
+  <main>
+    <div class="admin-container">
+      <div class="header-bar">
+        <h2>Врачи</h2>
+        <button id="addDoctorBtn" class="add-btn">➕</button>
+      </div>
+      <div class="doctor-list" id="doctorList">
+        <!-- Карточки врачей будут добавляться динамически -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Модальное окно -->
+  <div class="modal hidden" id="modal">
+    <div class="modal-content">
+      <h2>Добавить врача</h2>
+      <form id="addDoctorForm">
+        <label for="fullname">ФИО:</label>
+        <input type="text" id="fullname" placeholder="Введите ФИО" required>
+        <label for="specialty">Специальность:</label>
+        <input type="text" id="specialty" placeholder="Введите специальность" required>
+        <div class="modal-actions">
+          <button type="button" id="cancelBtn" class="cancel-btn">Отмена</button>
+          <button type="submit" class="submit-btn">Добавить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/admin-panel/script.js"></script>
+</body>
+</html>
