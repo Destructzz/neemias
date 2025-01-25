@@ -18,7 +18,7 @@ export class AuthService {
 
   async login(id : number, res: any) {
     const token = await this.generateToken({ userId: id });
-
+    
     res.cookie('jwt', token, {
       httpOnly: true,
       secure: false,

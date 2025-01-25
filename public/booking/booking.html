@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запись к врачу</title>
+    <link rel="stylesheet" href="/booking/style.css">
+</head>
+<body>
+    <header>
+        <h1>Запись на прием</h1>
+    </header>
+
+    <main>
+        <div class="booking-container">
+            <label for="specialtySelect">Выберите специальность:</label>
+            <select id="specialtySelect">
+                <option value="">Выберите специальность</option>
+            </select>
+
+            <label for="doctorSelect">Выберите врача:</label>
+            <select id="doctorSelect" disabled>
+                <option value="">Сначала выберите специальность</option>
+            </select>
+
+            <label for="timeSlotSelect">Выберите время:</label>
+            <select id="timeSlotSelect" disabled>
+                <option value="">Сначала выберите врача</option>
+            </select>
+
+            <button id="bookAppointmentBtn" disabled>Записаться</button>
+        </div>
+    </main>
+
+    <script src="/booking/script.js"></script>
+</body>
+</html>

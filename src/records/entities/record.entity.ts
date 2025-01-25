@@ -13,6 +13,6 @@ export class Record {
     @ManyToOne(() => User, (user) => user.records)
     user !: User
 
-    @ManyToOne(() => Doctor, (doctor) => doctor.records, {eager : true})
+    @ManyToOne(() => Doctor, (doctor) => doctor.records, {eager : true, onDelete : "CASCADE"})
     doctor !: Doctor
 }

@@ -38,11 +38,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Создание кнопки logout
             const logoutButton = document.createElement('button');
             logoutButton.textContent = 'Logout';
-            logoutButton.addEventListener('click', logout);
+            logoutButton.addEventListener('click', async ()=>{
+                await logout()
+            });
 
             // Добавляем элементы в DOM
             userInfoElement.appendChild(usernameLabel);
-            userInfoElement.appendChild(logoutButton);
 
         } catch (error) {
             console.error('Authentication check failed:', error.message);

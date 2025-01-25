@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel</title>
   <link rel="stylesheet" href="/admin-panel/style.css">
 </head>
@@ -20,19 +19,54 @@
         <!-- Карточки врачей будут добавляться динамически -->
       </div>
     </div>
+    <div class="admin-container">
+      <div class="header-bar">
+        <h2>Специальности</h2>
+        <button id="addSpecialtyBtn" class="add-btn">➕</button>
+      </div>
+      <div class="specialty-list" id="specialtyList">
+        <!-- Карточки специальностей будут добавляться динамически -->
+      </div>
+    </div>
   </main>
 
-  <!-- Модальное окно -->
-  <div class="modal hidden" id="modal">
+  <!-- Модальное окно для добавления врача -->
+  <div class="modal hidden" id="modalDoctor">
     <div class="modal-content">
       <h2>Добавить врача</h2>
       <form id="addDoctorForm">
-        <label for="fullname">ФИО:</label>
-        <input type="text" id="fullname" placeholder="Введите ФИО" required>
-        <label for="specialty">Специальность:</label>
-        <input type="text" id="specialty" placeholder="Введите специальность" required>
+        <label for="lastName">Фамилия:</label>
+        <input type="text" id="lastName" placeholder="Введите фамилию" required>
+
+        <label for="firstName">Имя:</label>
+        <input type="text" id="firstName" placeholder="Введите имя" required>
+
+        <label for="middleName">Отчество:</label>
+        <input type="text" id="middleName" placeholder="Введите отчество" required>
+
+        <label for="specialtySelect">Специальность:</label>
+        <select id="specialtySelect" required>
+          <option value="">Выберите специальность</option>
+        </select>
+
         <div class="modal-actions">
-          <button type="button" id="cancelBtn" class="cancel-btn">Отмена</button>
+          <button type="button" id="cancelDoctorBtn" class="cancel-btn">Отмена</button>
+          <button type="submit" class="submit-btn">Добавить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Модальное окно для добавления специальности -->
+  <div class="modal hidden" id="modalSpecialty">
+    <div class="modal-content">
+      <h2>Добавить специальность</h2>
+      <form id="addSpecialtyForm">
+        <label for="specialtyName">Название специальности:</label>
+        <input type="text" id="specialtyName" placeholder="Введите название специальности" required>
+
+        <div class="modal-actions">
+          <button type="button" id="cancelSpecialtyBtn" class="cancel-btn">Отмена</button>
           <button type="submit" class="submit-btn">Добавить</button>
         </div>
       </form>

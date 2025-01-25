@@ -11,16 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
+                credentials: 'include'  // Включаем отправку cookies
             });
 
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status}`);
             }
 
-            // Если сервер вернул токен напрямую (без JSON)
-            const responseText = await response.text();
-            return responseText;
+            return response.json();
         } catch (error) {
             console.error('Request error:', error);
             alert('Error: ' + error.message);
@@ -44,10 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/user/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ username, password }),
+                credentials: 'include'
             });
 
-            if (response.status === 201) {
+            if (response.ok) {
                 alert('User registered successfully!');
             } else {
                 alert('Registration failed. Please try again.');
@@ -71,31 +71,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const token = await sendRequest('/api/user/login', { username, password });
+            const response = await sendRequest('/api/user/login', { username, password });
 
-            if (token) {
-                localStorage.setItem('jwtToken', token);
-                alert('Login successful! Redirecting...');
-                window.location.href = '/'; // Перенаправление на главную страницу
-            } else {
-                alert('Login failed. Invalid credentials.');
-            }
+            alert('Login successful! Redirecting...');
+            window.location.href = '/';  // Перенаправление на главную страницу
         } catch (error) {
             console.error('Login error:', error);
         }
     });
 
-    // Функция проверки авторизации пользователя
-    function checkAuth() {
-        const token = localStorage.getItem('jwtToken');
-        if (token) {
-            console.log('User is logged in, token:', token);
-            window.location.href = '/'; // Если пользователь авторизован, перенаправляем
-        } else {
+    // Функция проверки авторизации пользователя через cookies
+    async function checkAuth() {
+        try {
+            const response = await fetch('/api/user/check', {
+                method: 'GET',
+                credentials: 'include'  // Передаем cookies на сервер
+            });
+
+            if (response.ok) {
+                console.log('User is logged in');
+                window.location.href = '/';  // Перенаправляем авторизованного пользователя
+            }
+        } catch (error) {
             console.log('User is not logged in.');
         }
     }
 
-    // Проверка токена при загрузке страницы
+    // Проверка авторизации при загрузке страницы
     checkAuth();
 });

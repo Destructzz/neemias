@@ -1,77 +1,189 @@
+// Элементы DOM
 const doctorList = document.getElementById('doctorList');
 const addDoctorBtn = document.getElementById('addDoctorBtn');
-const modal = document.getElementById('modal');
-const cancelBtn = document.getElementById('cancelBtn');
+const modalDoctor = document.getElementById('modalDoctor');
+const cancelDoctorBtn = document.getElementById('cancelDoctorBtn');
 const addDoctorForm = document.getElementById('addDoctorForm');
+const specialtySelect = document.getElementById('specialtySelect');
 
-let doctors = [
-  { id: 1, fullname: 'Иван Иванов', specialty: 'Терапевт' },
-  { id: 2, fullname: 'Анна Петрова', specialty: 'Кардиолог' },
-  { id: 3, fullname: 'Сергей Смирнов', specialty: 'Хирург' },
-  { id: 4, fullname: 'Мария Кузнецова', specialty: 'Офтальмолог' },
-  { id: 5, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-  { id: 6, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-  { id: 5, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-  { id: 5, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-  { id: 5, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-  { id: 5, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-  { id: 5, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-  { id: 5, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-  { id: 5, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-  { id: 9, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-  { id: 8, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-  { id: 7, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-  { id: 6, fullname: 'Дмитрий Соколов', specialty: 'Педиатр' },
-];
+const specialtyList = document.getElementById('specialtyList');
+const addSpecialtyBtn = document.getElementById('addSpecialtyBtn');
+const modalSpecialty = document.getElementById('modalSpecialty');
+const cancelSpecialtyBtn = document.getElementById('cancelSpecialtyBtn');
+const addSpecialtyForm = document.getElementById('addSpecialtyForm');
 
-// Рендеринг списка врачей
-function renderDoctors() {
+// ===================================================
+// Загрузка списка врачей
+async function loadDoctors() {
+  try {
+    const response = await fetch('/api/doctor');
+    if (!response.ok) throw new Error('Не удалось получить список врачей');
+
+    const doctors = await response.json();
+    console.log(doctors)
+    renderDoctors(doctors);
+  } catch (error) {
+    console.error(error);
+    alert('Ошибка при загрузке списка врачей');
+  }
+}
+
+function renderDoctors(doctors) {
   doctorList.innerHTML = '';
   doctors.forEach((doctor) => {
     const card = document.createElement('div');
     card.classList.add('doctor-card');
     card.innerHTML = `
-      <h3>${doctor.fullname}</h3>
-      <p>${doctor.specialty}</p>
-      <button class="delete-btn" onclick="deleteDoctor(${doctor.id})">❌</button>
+      <h3>${doctor.lastName} ${doctor.firstName} ${doctor.middleName}</h3>
+      <p>${doctor.specialty.name}</p>
+      <button class="delete-btn">❌</button>
     `;
+    const deleteBtn = card.querySelector('.delete-btn');
+    deleteBtn.addEventListener('click', () => deleteDoctor(doctor.id));
     doctorList.appendChild(card);
   });
 }
 
 // Удаление врача
-function deleteDoctor(id) {
-  doctors = doctors.filter((doctor) => doctor.id !== id);
-  renderDoctors();
+async function deleteDoctor(id) {
+  if (!confirm('Вы действительно хотите удалить этого врача?')) return;
+
+  try {
+    const response = await fetch(`/api/doctor/${id}`, { method: 'DELETE' });
+    if (!response.ok) throw new Error('Ошибка при удалении врача');
+
+    await loadDoctors();
+  } catch (error) {
+    console.error(error);
+    alert('Ошибка при удалении врача');
+  }
 }
 
-// Открытие модального окна
-addDoctorBtn.addEventListener('click', () => {
-  modal.classList.remove('hidden');
-});
+// ===================================================
+// Загрузка и отображение специальностей
+async function loadSpecialties() {
+  try {
+    const response = await fetch('/api/specialty');
+    if (!response.ok) throw new Error('Не удалось получить список специальностей');
 
-// Закрытие модального окна
-cancelBtn.addEventListener('click', () => {
-  modal.classList.add('hidden');
-});
+    const specialties = await response.json();
+    console.log(specialties)
+    renderSpecialties(specialties);
+    populateSpecialtySelect(specialties);
+  } catch (error) {
+    console.error(error);
+    alert('Ошибка при загрузке специальностей');
+  }
+}
 
-// Добавление нового врача
-addDoctorForm.addEventListener('submit', (event) => {
+function renderSpecialties(specialties) {
+  specialtyList.innerHTML = '';
+  specialties.forEach((specialty) => {
+    const card = document.createElement('div');
+    card.classList.add('specialty-card');
+    card.innerHTML = `
+      <h3>${specialty.name}</h3>
+      <button class="delete-btn">❌</button>
+    `;
+    const deleteBtn = card.querySelector('.delete-btn');
+    deleteBtn.addEventListener('click', () => deleteSpecialty(specialty.id));
+    specialtyList.appendChild(card);
+  });
+}
+
+function populateSpecialtySelect(specialties) {
+  specialtySelect.innerHTML = '<option value="">Выберите специальность</option>';
+  specialties.forEach((specialty) => {
+    const option = document.createElement('option');
+    option.value = specialty.name;
+    option.textContent = specialty.name;
+    specialtySelect.appendChild(option);
+  });
+}
+
+// Удаление специальности
+async function deleteSpecialty(id) {
+  if (!confirm('Вы действительно хотите удалить эту специальность?')) return;
+
+  try {
+    const response = await fetch(`/api/specialty/${id}`, { method: 'DELETE' });
+    if (!response.ok) throw new Error('Ошибка при удалении специальности');
+
+    await loadSpecialties();
+  } catch (error) {
+    console.error(error);
+    alert('Ошибка при удалении специальности');
+  }
+}
+
+// ===================================================
+// Добавление врача
+addDoctorBtn.addEventListener('click', () => modalDoctor.classList.remove('hidden'));
+cancelDoctorBtn.addEventListener('click', () => modalDoctor.classList.add('hidden'));
+
+addDoctorForm.addEventListener('submit', async (event) => {
   event.preventDefault();
-  const fullname = document.getElementById('fullname').value;
-  const specialty = document.getElementById('specialty').value;
+  const lastName = document.getElementById('lastName').value.trim();
+  const firstName = document.getElementById('firstName').value.trim();
+  const middleName = document.getElementById('middleName').value.trim();
+  const specialty = specialtySelect.value;
 
-  const newDoctor = {
-    id: Date.now(),
-    fullname,
-    specialty,
-  };
+  if (!lastName || !firstName || !middleName || !specialty) {
+    alert('Пожалуйста, заполните все поля!');
+    return;
+  }
 
-  doctors.push(newDoctor);
-  renderDoctors();
-  modal.classList.add('hidden');
-  addDoctorForm.reset();
+  try {
+    const response = await fetch('/api/doctor', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lastName, firstName, middleName, specialty }),
+    });
+    if (!response.ok) throw new Error('Ошибка при добавлении врача');
+
+    modalDoctor.classList.add('hidden');
+    addDoctorForm.reset();
+    await loadDoctors();
+  } catch (error) {
+    console.error(error);
+    alert('Ошибка при добавлении врача');
+  }
 });
 
-// Изначальный рендеринг
-renderDoctors();
+// ===================================================
+// Добавление специальности
+addSpecialtyBtn.addEventListener('click', () => modalSpecialty.classList.remove('hidden'));
+cancelSpecialtyBtn.addEventListener('click', () => modalSpecialty.classList.add('hidden'));
+
+addSpecialtyForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const specialtyName = document.getElementById('specialtyName').value.trim();
+
+  if (!specialtyName) {
+    alert('Пожалуйста, введите название специальности!');
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/specialty', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: specialtyName }),
+    });
+    if (!response.ok) throw new Error('Ошибка при добавлении специальности');
+
+    modalSpecialty.classList.add('hidden');
+    addSpecialtyForm.reset();
+    await loadSpecialties();
+  } catch (error) {
+    console.error(error);
+    alert('Ошибка при добавлении специальности');
+  }
+});
+
+// ===================================================
+// Инициализация
+(async function init() {
+  await loadDoctors();
+  await loadSpecialties();
+})();

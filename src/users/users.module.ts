@@ -8,10 +8,12 @@ import { User } from './entities/user.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { Doctor } from './entities/doctor.entity';
 import { Role } from './entities/role.entity';
+import { Specialty } from './entities/specialty.entity';
+import { Record } from 'src/records/entities/record.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Doctor, Role]), // Регистрация репозитория
+    TypeOrmModule.forFeature([User, Doctor, Role, Specialty, Record]), // Регистрация репозитория
     AuthModule,
     PasswordModule,          // Импортируем модуль с PasswordService
   ],

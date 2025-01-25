@@ -27,7 +27,7 @@ export class PageController {
         const filePath = join(__dirname, '..', '..', 'public', 'auth', 'auth.html')
         res.sendFile(filePath)
     }
-    // @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'))
     @Get('admin-panel')
     async getAdminPanelPage(@Res() res : Response, @Req() req : AuthenticatedRequest){
         const user = await this.userRepository.findOne({where : {id : req.user.userId}})
@@ -35,15 +35,22 @@ export class PageController {
         const isAdministrator = user.roles.some(role => role.name === 'administrator');
 
         if(!isAdministrator){
-            // throw new UnauthorizedException('only the administrator has access to this resource.')
+            throw new UnauthorizedException('only the administrator has access to this resource.')
         }
         
         const filePath = join(__dirname, '..', '..', 'public', 'admin-panel', 'admin-panel.html')
         res.sendFile(filePath)
     }
+    @UseGuards(AuthGuard('jwt'))
     @Get('profile')
     getProfilePage(@Res() res : Response) : void{
         const filePath = join(__dirname, '..', '..', 'public', 'profile', 'profile.html')
+        res.sendFile(filePath)
+    }
+    @UseGuards(AuthGuard('jwt'))
+    @Get('booking')
+    getBookingPage(@Res() res : Response) {
+        const filePath = join(__dirname, '..', '..', 'public', 'booking', 'booking.html')
         res.sendFile(filePath)
     }
 }

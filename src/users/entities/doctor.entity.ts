@@ -17,9 +17,9 @@ export class Doctor {
     @Column()
     middleName !: string
 
-    @ManyToOne(() => Specialty, (specialty) => specialty.doctors,{eager: true})
+    @ManyToOne(() => Specialty, (specialty) => specialty.doctors,{eager: true, onDelete : 'CASCADE'})
     specialty !: Specialty
 
-    @OneToMany(() => Record, (record) => record.doctor)
+    @OneToMany(() => Record, (record) => record.doctor, {onDelete : "CASCADE"})
     records !: Record[]
 }

@@ -10,6 +10,6 @@ export class Specialty{
     @Column()
     name !: string
 
-    @OneToMany(() => Doctor, (doctor) => doctor.specialty)
+    @OneToMany(() => Doctor, (doctor) => doctor.specialty, {onDelete : 'CASCADE'})
     doctors !: Doctor[]
 }

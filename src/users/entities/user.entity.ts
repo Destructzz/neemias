@@ -12,10 +12,10 @@ export class User {
     @Column()
     hash !: string
 
-    @OneToMany(() => Record, (record) => record.user, {eager : true})
+    @OneToMany(() => Record, (record) => record.user, {eager : true, onDelete : "CASCADE"})
     records !: Record[]
 
-    @ManyToMany(() => Role, (role) => role.users, {eager : true})
+    @ManyToMany(() => Role, (role) => role.users, {eager : true, onDelete : "CASCADE"})
     @JoinTable()
     roles !: Role[]
 }
