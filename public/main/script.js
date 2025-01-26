@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const data = await response.json(); // Получаем имя пользователя
             const username = data.username;
 
+            console.log(username)
+
             // Создание и добавление надписи с никнеймом
             const usernameLabel = document.createElement('span');
             usernameLabel.textContent = `Hello, ${username}`;

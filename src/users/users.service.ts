@@ -25,33 +25,35 @@ export class UsersService {
         private readonly recordRepository : Repository<Record>,
         private readonly authService : AuthService,
     ){}
+
     async register(username: string, password: string) {
         const user = await this.userRepository.findOne({ where: { username } });
     
         if (user) {
-            throw new ConflictException('This user already exists');
+            throw new ConflictException('this user already exists');
         }
     
-        const newUser = this.userRepository.create({
-            username: username.trim(),
-            hash: await this.passwordService.hashPassword(password)
-        });
+        const hash = await this.passwordService.hashPassword(password);
+    
+        const newUser = this.userRepository.create({ username, hash});
     
         await this.userRepository.save(newUser);
-    
-        return { message: 'User registered successfully!' };
     }
     
-    async login(username : string, password : string, res : Response){
-        const user = await this.userRepository.findOne({where : {username}})
-
-        if (!user) throw new UnauthorizedException('This user doesn\'t exist');
-
-        if(!await this.passwordService.comparePassword(password, user.hash)){
-            throw new UnauthorizedException('Password is incorect')
+    async login(username: string, password: string, res: Response) {
+        const user = await this.userRepository.findOne({ where: { username } });
+    
+        if (!user) {
+            throw new UnauthorizedException('incorrect username');
         }
-        this.authService.login(user.id, res)
+    
+        if (!(await this.passwordService.comparePassword(password, user.hash))) {
+            throw new UnauthorizedException('incorrect password');
+        }
+    
+        return this.authService.login(user.id, res);
     }
+    
 
     async createDoctor(data: CreateDoctorDto) {
         // Поиск специальности

@@ -35,18 +35,24 @@ export class UsersController {
   @Post('user/register')
   async register(@Body() body: CreateUserDto) {
     this.usersService.register(body.username, body.password);
+    return {message : 'User Successfuly registered'}
   }
+
   @Post('user/login')
   async login(@Body() body: CreateUserDto, @Res() res: Response) {
     await this.usersService.login(body.username, body.password, res);
-    return ({ message: 'Login successful' });
+
+    res.write(JSON.stringify({message : 'Login successful'}))
+    res.end()
   }
+
   @UseGuards(AuthGuard('jwt'))
   @Get('user/check')
   async check(@Req() req: AuthenticatedRequest) {
     const user = await this.userRepository.findOne({
       where: { id: req.user.userId },
     });
+    console.log(user)
     return { username: user.username };
   }
 
@@ -58,7 +64,8 @@ export class UsersController {
       path: '/', // Рекомендуется, если был задан при установке
     });
 
-    return { message: 'Logout successful' };
+    res.write(JSON.stringify({ message: 'Logout successful' }));
+    res.end()
   }
 
   @Get('doctor')
