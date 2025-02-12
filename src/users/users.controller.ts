@@ -38,7 +38,7 @@ export class UsersController {
     return {message : 'User Successfuly registered'}
   }
 
-  @Post('user/login')
+  @Post('user/login') //localhost:8080/api/user/login POST
   async login(@Body() body: CreateUserDto, @Res() res: Response) {
     await this.usersService.login(body.username, body.password, res);
 
@@ -50,12 +50,11 @@ export class UsersController {
   @Get('user/check')
   async check(@Req() req: AuthenticatedRequest) {
     const user = await this.userRepository.findOne({
-      where: { id: req.user.userId },
+      where: { id: req.user.id },
     });
-    console.log(user)
     return { username: user.username };
   }
-
+  
   @Get('logout')
   async logout(@Res() res: Response) {
     res.clearCookie('jwt', {
@@ -84,7 +83,7 @@ export class UsersController {
     @Body() Body: CreateSpecialtyDto,
   ) {
     const user = await this.userRepository.findOne({
-      where: { id: req.user.userId },
+      where: { id: req.user.id },
     });
 
     if (
@@ -105,7 +104,7 @@ export class UsersController {
     @Body() Body: CreateDoctorDto,
   ) {
     const user = await this.userRepository.findOne({
-      where: { id: req.user.userId },
+      where: { id: req.user.id },
     });
 
     if (
@@ -126,7 +125,7 @@ export class UsersController {
   ) {
     // Проверка, существует ли пользователь
     const user = await this.userRepository.findOne({
-      where: { id: req.user.userId },
+      where: { id: req.user.id },
     });
 
     if (!user) {
@@ -154,7 +153,7 @@ export class UsersController {
   ) {
     // Проверка, существует ли пользователь
     const user = await this.userRepository.findOne({
-      where: { id: req.user.userId },
+      where: { id: req.user.id },
     });
 
     if (!user) {

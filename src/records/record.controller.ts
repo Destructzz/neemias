@@ -21,7 +21,7 @@ export class RecordController {
   @UseGuards(AuthGuard('jwt'))
   @Get()
   async getRecord(@Req() req: AuthenticatedRequest) {
-    const user = await this.userRepository.findOne({ where: { id: req.user.userId } });
+    const user = await this.userRepository.findOne({ where: { id: req.user.id } });
 
     if (!user) {
       throw new UnauthorizedException('User from cookie doesn\'t exist');
@@ -35,7 +35,7 @@ export class RecordController {
     @Req() req: AuthenticatedRequest, 
     @Body() createRecordDto: CreateRecordDto
   ) {
-    const user = await this.userRepository.findOne({ where: { id: req.user.userId } });
+    const user = await this.userRepository.findOne({ where: { id: req.user.id } });
 
     if (!user) {
       throw new UnauthorizedException('User from cookie doesn\'t exist');
@@ -50,7 +50,7 @@ export class RecordController {
     @Req() req: AuthenticatedRequest, 
     @Param('id') id: number
   ) {
-    const user = await this.userRepository.findOne({ where: { id: req.user.userId } });
+    const user = await this.userRepository.findOne({ where: { id: req.user.id } });
 
     if (!user) {
       throw new UnauthorizedException('User from cookie doesn\'t exist');

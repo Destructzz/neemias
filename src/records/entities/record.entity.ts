@@ -10,7 +10,7 @@ export class Record {
     @Column()
     date !: Date
 
-    @ManyToOne(() => User, (user) => user.records)
+    @ManyToOne(()=> User, (user) => user.records)
     user !: User
 
     @ManyToOne(() => Doctor, (doctor) => doctor.records, {eager : true, onDelete : "CASCADE"})

@@ -30,7 +30,7 @@ export class PageController {
     @UseGuards(AuthGuard('jwt'))
     @Get('admin-panel')
     async getAdminPanelPage(@Res() res : Response, @Req() req : AuthenticatedRequest){
-        const user = await this.userRepository.findOne({where : {id : req.user.userId}})
+        const user = await this.userRepository.findOne({where : {id : req.user.id}})
 
         const isAdministrator = user.roles.some(role => role.name === 'administrator');
 

@@ -18,6 +18,10 @@ export class AuthService {
 
   async login(id : number, res: any) {
     const token = await this.generateToken({ userId: id });
+
+    const user = await this.userRepository.findOne({where : {id}})
+
+    console.log(`login authservice - ${user.username}`)
     
     res.cookie('jwt', token, {
       httpOnly: true,
